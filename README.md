@@ -1,2 +1,2 @@
 # CSGOTriggerBot
-C++ CSGO TriggerBot hack using ReadProcessMemory and WriteProcessMemory as a Proof Of Concept.
+C++ CSGO combination of aimbot + triggerbot hack using ReadProcessMemory and WriteProcessMemory as a Proof Of Concept.
