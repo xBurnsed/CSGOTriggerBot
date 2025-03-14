@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{FB44E66E-3185-4E0E-9FA0-6FAFC9D16F61}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TriggerBotTest</RootNamespace>
+    <RootNamespace>TriggerBot</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -148,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ExternalLib.cpp" />
-    <ClCompile Include="TriggerBotTest.cpp" />
+    <ClCompile Include="TriggerBot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExternalLib.h" />
