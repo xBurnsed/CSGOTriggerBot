@@ -1,7 +1,6 @@
 #pragma once
 
 // OFFSETS
-
 #define dwEntityList 0x4D43AB4
 #define dwLocalPlayer 0xD2FB84
 #define m_iCrosshairId 0xB3D4
@@ -15,8 +14,6 @@
 
 #define m_dwBoneMatrix 0x26A8
 #define m_vecViewOffset  0x108
-
-
 
 //client State
 #define dwClientState 0x589DCC

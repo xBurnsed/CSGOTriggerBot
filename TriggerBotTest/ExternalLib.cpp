@@ -1,7 +1,6 @@
 #include "ExternalLib.h"
 #include <iostream>
 
-
 HANDLE ExternalLib::getHandle() {
 	return this->pHandle;
 }
@@ -15,32 +14,29 @@ std::string ExternalLib::getProcessName() {
 }
 
 void ExternalLib::setHandle() {
-	// Don't get any Handle until Insert key is pressed ingame
-		do {
-			while (!this->isKeyDown(VK_INSERT)) {}
+	do {
+		while (!this->isKeyDown(VK_INSERT)) {}
+		
+		HWND tempWindow = GetForegroundWindow();
 
-			HWND tempWindow = GetForegroundWindow();
+		LPDWORD tempPDWORD = new DWORD();
+		GetWindowThreadProcessId(tempWindow, tempPDWORD);
+		this->processPID = *tempPDWORD;
+		delete tempPDWORD;
 
-			//Had to alloc memory in some way.
-			LPDWORD tempPDWORD = new DWORD();
-			GetWindowThreadProcessId(tempWindow, tempPDWORD);
-			this->processPID = *tempPDWORD;
-			delete tempPDWORD;
+		this->pHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_VM_WRITE, 0, this->processPID);
 
-			this->pHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_VM_WRITE, 0, this->processPID);
-
-			CHAR Buffer[40];
-			GetModuleBaseNameA(this->pHandle, NULL, Buffer, 40);
-			this->processName = (std::string)Buffer;
-		} while (this->processName != "csgo.exe");
-		std::cout << "Game detected succesfully!!!" << std::endl;
+		CHAR Buffer[40];
+		GetModuleBaseNameA(this->pHandle, NULL, Buffer, 40);
+		this->processName = (std::string)Buffer;
+	} while (this->processName != "csgo.exe");
+	std::cout << "Game detected succesfully!!!" << std::endl;
 }
 
 DWORD ExternalLib::GetModuleAddr(DWORD pID, const char* modName) {
 	HANDLE modSnapHandle = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE32 | TH32CS_SNAPMODULE, this->processPID);
 	if (modSnapHandle == INVALID_HANDLE_VALUE) {
 		std::cout << "Error reading the module list of that ProcessPID. GetLastError = " << GetLastError() << std::endl;
-		//CloseHandle(modSnapHandle);
 		return NULL;
 	}
 	MODULEENTRY32 mEntry32;
@@ -48,7 +44,6 @@ DWORD ExternalLib::GetModuleAddr(DWORD pID, const char* modName) {
 
 	if (Module32First(modSnapHandle, &mEntry32) == FALSE) {
 		std::cout << "Error getting the first module from the Snapshot. GetLastError = " << GetLastError() << std::endl;
-		//CloseHandle(modSnapHandle);
 		return NULL;
 	}
 
@@ -56,9 +51,8 @@ DWORD ExternalLib::GetModuleAddr(DWORD pID, const char* modName) {
 	while (_stricmp(mEntry32.szModule, modName) != 0) {
 		Module32Next(modSnapHandle, &mEntry32);
 	}
-
+	
 	CloseHandle(modSnapHandle);
-
 	return !_stricmp(mEntry32.szModule, modName) ? (DWORD)mEntry32.hModule : NULL;
 }
 
